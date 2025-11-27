@@ -5,246 +5,139 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OFFIT - 나에게 딱 맞는 오피스 핏</title>
     <style>
-        /* (스타일은 기존 코드를 최대한 유지하며, 폼 관련 스타일만 제거) */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; }
-        body { color: #333; line-height: 1.6; scroll-behavior: smooth; } /* 부드러운 스크롤 유지 */
+        /* (스타일은 가독성을 위해 생략하고, 기능/구조 스타일만 포함) */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
+        body { color: #333; line-height: 1.6; scroll-behavior: smooth; }
         a { text-decoration: none; color: inherit; }
-
-        /* 컬러 팔레트 */
-        :root {
-            --primary: #2962FF;
-            --accent: #00E676;
-            --dark: #1A237E;
-            --light: #F3F6F9;
-            --white: #FFFFFF;
-        }
-
-        /* 헤더 영역 */
-        header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 5%; background: rgba(255,255,255,0.95);
-            position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            backdrop-filter: blur(10px);
-        }
-        .logo { font-size: 26px; font-weight: 900; color: var(--dark); letter-spacing: -1px; font-style: italic;}
-        .logo span { color: var(--primary); }
-        /* 버튼을 앵커 태그로 변경 */
-        .nav-btn {
-            background: var(--dark); color: white; padding: 10px 24px;
-            border-radius: 25px; font-weight: 600; font-size: 14px; transition: 0.3s;
-            cursor: pointer; display: inline-block; /* <a> 태그를 버튼처럼 보이게 */
-        }
-        .nav-btn:hover { background: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(41, 98, 255, 0.3); }
-
-        /* 히어로 섹션 */
-        .hero {
-            background: linear-gradient(135deg, #F9FAFB 0%, #E3F2FD 100%);
-            padding: 80px 5%; display: flex; align-items: center; justify-content: space-between;
-            min-height: 85vh; flex-wrap: wrap;
-        }
+        :root { --primary: #2962FF; --accent: #00E676; --dark: #1A237E; --white: #FFFFFF; --success: #00C853; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(255,255,255,0.95); position: sticky; top: 0; z-index: 100; box-shadow: 0 0 10px rgba(0,0,0,0.1); backdrop-filter: blur(10px); }
+        .logo { font-size: 26px; font-weight: 900; color: var(--dark); letter-spacing: -1px; font-style: italic;} .logo span { color: var(--primary); }
+        .nav-btn { background: var(--dark); color: white; padding: 10px 24px; border-radius: 25px; font-weight: 600; font-size: 14px; cursor: pointer; }
+        .hero { background: linear-gradient(135deg, #F9FAFB 0%, #E3F2FD 100%); padding: 80px 5%; display: flex; align-items: center; justify-content: space-between; min-height: 85vh; flex-wrap: wrap; }
         .hero-text { flex: 1; min-width: 320px; padding-right: 40px; margin-bottom: 40px; }
-        .hero-text h1 { font-size: 3.8rem; line-height: 1.2; margin-bottom: 24px; color: var(--dark); letter-spacing: -1px; }
-        .hero-text h1 span { color: var(--primary); position: relative; display: inline-block; }
-        /* 밑줄 효과 */
-        .hero-text h1 span::after {
-            content: ''; display: block; width: 100%; height: 10px; 
-            background: var(--accent); opacity: 0.4; position: absolute; bottom: 5px; left: 0; z-index: -1;
-        }
-        .hero-text p { font-size: 1.25rem; color: #546E7A; margin-bottom: 36px; font-weight: 500; }
-        /* 버튼을 앵커 태그로 변경 */
-        .hero-cta {
-            display: inline-block; background: var(--primary); color: white;
-            padding: 18px 40px; border-radius: 50px; font-size: 1.1rem; font-weight: bold;
-            box-shadow: 0 10px 20px rgba(41, 98, 255, 0.25); transition: 0.3s; cursor: pointer;
-        }
-        .hero-cta:hover { background: var(--dark); transform: translateY(-3px); }
-        
-        /* 앱 목업 */
-        .hero-image { flex: 1; min-width: 300px; display: flex; justify-content: center; position: relative; }
-        .phone-frame {
-            width: 320px; height: 640px; background: white; border: 12px solid #263238;
-            border-radius: 45px; position: relative; overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-        }
-        .phone-notch {
-            width: 140px; height: 28px; background: #263238;
-            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-            border-bottom-left-radius: 18px; border-bottom-right-radius: 18px; z-index: 10;
-        }
-        .app-screen { padding: 45px 20px 20px; height: 100%; background: #FAFAFA; display: flex; flex-direction: column; }
-        .app-header { font-weight: 800; font-size: 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; color: var(--dark); }
-        .map-area { 
-            width: 100%; height: 220px; background: #ECEFF1; border-radius: 20px; margin-bottom: 20px;
-            display: flex; align-items: center; justify-content: center; color: #90A4AE; position: relative; overflow: hidden;
-        }
-        .map-area::before { content: ''; position: absolute; width: 100%; height: 100%; background: radial-gradient(circle, #CFD8DC 10%, transparent 10%) 0 0 / 20px 20px; opacity: 0.5; }
-        
-        .pin { width: 34px; height: 34px; background: var(--primary); border-radius: 50% 50% 0 50%; position: absolute; top: 40%; left: 45%; transform: rotate(45deg); box-shadow: 0 5px 10px rgba(0,0,0,0.2); }
-        .pin::after { content: ''; width: 12px; height: 12px; background: white; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-
-        .filter-title { font-weight: 700; font-size: 15px; margin-bottom: 12px; color: #37474F; }
-        .filter-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-        .tag { 
-            padding: 8px 14px; background: white; border: 1px solid #CFD8DC; border-radius: 20px; 
-            font-size: 12px; color: #546E7A; display: flex; align-items: center; font-weight: 500;
-        }
-        .tag.active { background: var(--dark); color: white; border-color: var(--dark); }
-
-        .section { padding: 100px 5%; text-align: center; background: white; }
-        .section h2 { font-size: 2.5rem; margin-bottom: 60px; color: var(--dark); font-weight: 800; }
+        .hero-text h1 { font-size: 3.8rem; line-height: 1.2; color: var(--dark); letter-spacing: -1px; }
+        .hero-cta { display: inline-block; background: var(--primary); color: white; padding: 18px 40px; border-radius: 50px; font-weight: bold; cursor: pointer; }
+        .phone-frame { width: 320px; height: 640px; background: white; border: 12px solid #263238; border-radius: 45px; overflow: hidden; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.15); }
+        .app-screen { padding: 45px 20px; background: #FAFAFA; height: 100%; display: flex; flex-direction: column; }
+        .section { padding: 100px 5%; text-align: center; } 
         .features-grid { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
-        .feature-card {
-            background: white; padding: 40px 30px; border-radius: 24px; width: 320px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06); transition: 0.3s; border: 1px solid #F0F0F0;
-        }
-        .feature-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: var(--primary); }
-        .icon { font-size: 48px; margin-bottom: 24px; display: block; }
-        .feature-card h3 { margin-bottom: 16px; font-size: 1.3rem; font-weight: 700; color: #333; }
-        .feature-card p { font-size: 1rem; color: #666; line-height: 1.6; }
-
-        .partners { background: var(--light); padding: 70px 5%; text-align: center; }
-        .partners h3 { color: #78909C; font-weight: 600; margin-bottom: 40px; font-size: 0.9rem; letter-spacing: 2px; }
-        .logo-row { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; font-weight: 800; font-size: 1.6rem; color: #B0BEC5; }
-        
         footer { background: #1a1a1a; color: white; padding: 80px 5%; text-align: center; }
-        .footer-cta h2 { margin-bottom: 24px; font-size: 2rem; }
-        .footer-cta p { color: #999; margin-bottom: 40px; }
         
-        /* iframe 컨테이너 스타일 */
-        .iframe-container {
-            margin: 0 auto;
-            max-width: 600px; /* PC에서 최대 너비 */
-            min-height: 800px; /* iframe 높이 설정 */
-            overflow: hidden; /* iframe 스크롤 숨기기 */
-        }
+        /* 폼 스타일 */
+        #customForm { margin: 0 auto 50px; max-width: 550px; padding: 25px; border-radius: 16px; background: rgba(255,255,255,0.05); text-align: left; }
+        .preference-group { margin-bottom: 20px; }
+        .pref-label { display: block; color: var(--accent); font-weight: bold; margin-bottom: 10px; }
+        .radio-group { display: flex; gap: 10px; }
+        .radio-item { flex: 1; position: relative; cursor: pointer; }
+        .radio-item input { position: absolute; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+        .radio-item span { display: flex; align-items: center; justify-content: center; padding: 12px 5px; background: rgba(255,255,255,0.1); border-radius: 10px; color: #eee; border: 2px solid transparent; }
+        .radio-item input:checked + span { background: rgba(41, 98, 255, 0.25); border-color: var(--primary); font-weight: bold; }
+        .input-group input { width: 100%; padding: 16px; border-radius: 10px; border: none; background: rgba(0,0,0,0.3); color: white; margin-top: 15px; }
+        #submitBtn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 25px; }
+        .success-message { display: none; padding: 30px; background: rgba(0, 200, 83, 0.1); color: var(--success); border: 1px solid var(--success); border-radius: 16px; margin-top: 20px; text-align: center; }
+        #customForm.submitted > div:not(.success-message), #customForm.submitted > button { display: none; }
+        #customForm.submitted .success-message { display: block; }
         
-        .copyright { border-top: 1px solid #333; padding-top: 40px; font-size: 0.8rem; color: #666; line-height: 1.8; }
-
-        /* 반응형 */
-        @media (max-width: 768px) {
-            .hero-text h1 { font-size: 2.8rem; }
-            .hero { flex-direction: column-reverse; text-align: center; padding-top: 40px; }
-            .hero-text { padding-right: 0; margin-top: 60px; }
-            .phone-frame { margin: 0 auto; }
-            /* 모바일에서 iframe 너비를 화면에 꽉 채우도록 설정 */
-            .iframe-container { max-width: 100%; min-height: 800px; padding: 0 10px; }
-        }
+        @media (max-width: 768px) { .hero-text h1 { font-size: 2.8rem; } .hero { flex-direction: column-reverse; text-align: center; } }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo">OF<span>FIT</span></div>
-        <a href="#footer" class="nav-btn">사전 예약하기</a>
+        <div class="nav-btn" onclick="scrollToForm()">내 오피스 핏 진단하기</div>
     </header>
 
     <section class="hero">
         <div class="hero-text">
             <h1>당신의 오피스 핏,<br><span>오핏(OFFIT)</span>에서<br>찾아 드립니다.</h1>
             <p>단순한 공간 대여가 아닙니다.<br>예산, 기간은 기본. 당신의 <strong>업무 스타일(Fit)</strong>까지 분석해<br>가장 완벽한 업무 환경을 추천합니다.</p>
-            <a href="#footer" class="hero-cta">지금 사전 예약하고 혜택받기</a>
+            <div class="hero-cta" onclick="scrollToForm()">지금 무료로 핏(Fit) 진단받기</div>
         </div>
-
-        <div class="hero-image">
-            <div class="phone-frame">
-                <div class="phone-notch"></div>
-                <div class="app-screen">
-                    <div class="app-header">
-                        <span style="font-style:italic;">OF<span style="color:var(--primary)">FIT</span></span>
-                        <span style="font-size:20px;">≡</span>
-                    </div>
-                    <div class="map-area">
-                        <div class="pin"></div>
-                        <span style="margin-top:50px; font-size:11px; letter-spacing:1px; font-weight:bold;">LOCATION BASE</span>
-                    </div>
-                    <div class="filter-title">어떤 환경(Fit)을 원하세요?</div>
-                    <div class="filter-tags">
-                        <span class="tag active">💻 개발자_집중</span>
-                        <span class="tag">☕ 카페_무드</span>
-                        <span class="tag active">🚀 네트워킹</span>
-                        <span class="tag">🎬 스튜디오</span>
-                        <span class="tag">🛡️ 보안_철저</span>
-                    </div>
-                    <div style="flex:1; overflow:hidden;">
-                        <div style="background:white; padding:18px; border-radius:18px; box-shadow:0 4px 12px rgba(0,0,0,0.04); margin-bottom:12px; border:1px solid #eee;">
-                            <div style="font-weight:bold; font-size:15px; margin-bottom:4px;">스파크워크 강남점</div>
-                            <div style="font-size:12px; color:#90A4AE;">강남구 역삼동 · 300m</div>
-                            <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:10px;">
-                                <span style="font-size:11px; background:#E3F2FD; color:#1976D2; padding:4px 8px; border-radius:4px;">#IT특화</span>
-                                <span style="font-weight:800; color:var(--dark);">월 250,000원~</span>
-                            </div>
-                        </div>
-                        <div style="background:white; padding:18px; border-radius:18px; box-shadow:0 4px 12px rgba(0,0,0,0.04); border:1px solid #eee;">
-                            <div style="font-weight:bold; font-size:15px; margin-bottom:4px;">코지 라운지 성수</div>
-                            <div style="font-size:12px; color:#90A4AE;">성동구 성수동 · 1.2km</div>
-                            <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:10px;">
-                                <span style="font-size:11px; background:#E0F2F1; color:#00796B; padding:4px 8px; border-radius:4px;">#감성인테리어</span>
-                                <span style="font-weight:800; color:var(--dark);">1일 15,000원</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
 
     <section class="section">
         <h2>왜 오핏(OFFIT) 인가요?</h2>
         <div class="features-grid">
-            <div class="feature-card">
-                <span class="icon">🔍</span>
-                <h3>통합 비교 검색</h3>
-                <p>수십 개 사이트를 돌지 마세요. 지도 기반으로 위치, 가격, 잔여석을 한눈에 비교할 수 있습니다.</p>
-            </div>
-            <div class="feature-card">
-                <span class="icon">🧩</span>
-                <h3>초개인화 스타일 핏</h3>
-                <p>'개발자 집중형', '크리에이터 스튜디오' 등 내 업무 스타일에 딱 맞는 환경을 태그로 매칭합니다.</p>
-            </div>
-            <div class="feature-card">
-                <span class="icon">⚡</span>
-                <h3>원스톱 다이렉트</h3>
-                <p>복잡한 전화 상담 없이, 앱에서 투어 신청부터 견적 확인까지 다이렉트로 연결됩니다.</p>
-            </div>
+            <div class="feature-card"><h3>🔍 통합 비교 검색</h3><p>수십 개 사이트를 돌지 마세요. 지도 기반으로 위치, 가격, 잔여석을 한눈에 비교할 수 있습니다.</p></div>
+            <div class="feature-card"><h3>🧩 초개인화 스타일 핏</h3><p>'개발자 집중형', '크리에이터 스튜디오' 등 내 업무 스타일에 딱 맞는 환경을 태그로 매칭합니다.</p></div>
+            <div class="feature-card"><h3>⚡ 원스톱 다이렉트</h3><p>복잡한 전화 상담 없이, 앱에서 투어 신청부터 견적 확인까지 다이렉트로 연결됩니다.</p></div>
         </div>
-    </section>
-
-    <section class="partners">
-        <h3>TRUSTED BY LOCAL SPACES</h3>
-        <div class="logo-row">
-            <div>SPARK WORK</div>
-            <div>THE STUDIO</div>
-            <div>NEST OFFICE</div>
-            <div>CO-HIVE</div>
-            <div>LOCAL LOUNGE</div>
-        </div>
-        <p style="margin-top:30px; font-size:0.9rem; color:#78909C;">
-            강남, 성수 지역의 핫플레이스 오피스들이 오핏과 함께합니다.
-        </p>
     </section>
 
     <footer id="footer">
         <div class="footer-cta">
-            <h2>가장 스마트한 오피스 생활,<br>남들보다 먼저 시작하세요.</h2>
-            <p>이메일을 등록하고 출시 소식과 혜택을 가장 먼저 받아보세요.<br>아래 폼을 통해 이용자 또는 운영사 파트너십 문의가 가능합니다.</p>
+            <h2>나에게 딱 맞는 오피스,<br>AI 진단으로 찾아보세요.</h2>
+            <p>4가지 질문에 답해주시면, 당신의 업무 성향을 분석하여<br>최적의 오피스 리스트를 메일로 보내드립니다.</p>
             
-            <div class="iframe-container">
-                <iframe 
-                    src="https://docs.google.com/forms/d/e/1FAIpQLSe7ejCuF0FZuSLOMWZGIijNErPfmG748bVLsM_-O5_1pH8AkA/viewform?embedded=true" 
-                    width="100%" 
-                    height="800px" 
-                    frameborder="0" 
-                    marginheight="0" 
-                    marginwidth="0">로드 중…</iframe>
-            </div>
+            <form id="customForm" 
+                  action="https://docs.google.com/forms/d/e/1rRSABmM-z-NolzNN3SfnnRln1vq3gVLplkHMx5v98a4/formResponse" 
+                  method="POST" 
+                  target="google-form-iframe">
+                
+                <div class="preference-group">
+                    <label class="pref-label">Q1. 선호하는 업무 분위기는?</label>
+                    <div class="radio-group">
+                        <label class="radio-item"><input type="radio" name="entry.370307877" value="조용한 집중형" required><span>🤫 조용한 집중</span></label>
+                        <label class="radio-item"><input type="radio" name="entry.370307877" value="활기찬 카페형"><span>☕ 활기찬 카페</span></label>
+                    </div>
+                </div>
+
+                <div class="preference-group">
+                    <label class="pref-label">Q2. 희망하는 이용 기간은?</label>
+                    <div class="radio-group">
+                        <label class="radio-item"><input type="radio" name="entry.189229882" value="시간/일 단위" required><span>⚡ 시간/일 단위 (Flex)</span></label>
+                        <label class="radio-item"><input type="radio" name="entry.189229882" value="월 단위"><span>📅 월 단위 (Stable)</span></label>
+                    </div>
+                </div>
+
+                <div class="preference-group">
+                    <label class="pref-label">Q3. 가장 중요한 시설은?</label>
+                    <div class="radio-group">
+                        <label class="radio-item"><input type="radio" name="entry.1238327539" value="네트워킹/라운지" required><span>🤝 네트워킹/라운지</span></label>
+                        <label class="radio-item"><input type="radio" name="entry.1238327539" value="보안/독립룸"><span>🔒 보안/독립룸</span></label>
+                    </div>
+                </div>
+
+                <div class="preference-group">
+                    <label class="pref-label">Q4. 위치 선정 기준은?</label>
+                    <div class="radio-group">
+                        <label class="radio-item"><input type="radio" name="entry.1993302438" value="집에서 가까운 곳" required><span>🏠 집 근처 (재택대용)</span></label>
+                        <label class="radio-item"><input type="radio" name="entry.1993302438" value="미팅 편한 핫플"><span>🏙️ 미팅 편한 핫플</span></label>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" id="emailInput" name="entry.987425434" placeholder="분석 리포트를 받을 이메일 주소" required>
+                </div>
+
+                <button type="submit" id="submitBtn">내 오피스 성향 분석 결과 받기</button>
+
+                <div class="success-message">
+                    🎉 분석 신청 완료!<br><br>보내주신 4가지 데이터를 정밀 분석하여<br>딱 맞는 오피스를 메일로 보내드릴게요.
+                </div>
+            </form>
+            
+            <iframe name="google-form-iframe" id="google-form-iframe" style="display:none;"></iframe>
             
         </div>
         <div class="copyright">
-            (주)오핏 | 대표: 이동욱 | 사업자등록번호: 999-99-99999<br>
+            (주)오핏 | 대표: 홍길동 | 사업자등록번호: 000-00-00000<br>
             contact@offit.com<br>
             © 2025 OFFIT. All rights reserved.
         </div>
     </footer>
 
+    <script>
+        function scrollToForm() { document.getElementById('customForm').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        const form = document.getElementById('customForm');
+        form.addEventListener('submit', function() {
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = '데이터 분석 중...';
+            
+            // 데이터 전송 시간을 위해 1초 후 UI 변경
+            setTimeout(() => { form.classList.add('submitted'); }, 1000);
+        });
+    </script>
 </body>
 </html>
