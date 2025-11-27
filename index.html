@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OFFIT - 나에게 딱 맞는 오피스 핏</title>
     <style>
-        /* (스타일은 기존과 동일하므로 생략) */
+        /* (스타일은 기존과 동일) */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
         body { color: #333; line-height: 1.6; scroll-behavior: smooth; }
         a { text-decoration: none; color: inherit; }
@@ -25,7 +25,8 @@
         
         /* 폼 스타일 */
         #customForm { margin: 0 auto 50px; max-width: 550px; padding: 25px; border-radius: 16px; background: rgba(255,255,255,0.05); text-align: left; }
-        .preference-group { margin-bottom: 20px; } .pref-label { display: block; color: var(--accent); font-weight: bold; margin-bottom: 10px; }
+        .preference-group { margin-bottom: 20px; }
+        .pref-label { display: block; color: var(--accent); font-weight: bold; margin-bottom: 10px; }
         .radio-group { display: flex; gap: 10px; }
         .radio-item { flex: 1; position: relative; cursor: pointer; }
         .radio-item input { position: absolute; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
@@ -34,15 +35,12 @@
         .input-group input { width: 100%; padding: 16px; border-radius: 10px; border: none; background: rgba(0,0,0,0.3); color: white; margin-top: 15px; }
         #submitBtn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 25px; }
         .success-message { display: none; padding: 30px; background: rgba(0, 200, 83, 0.1); color: var(--success); border: 1px solid var(--success); border-radius: 16px; margin-top: 20px; text-align: center; }
-        #customForm.submitted > div:not(.success-message), #customForm.submitted > button { display: none; }
-        #customForm.submitted .success-message { display: block; }
-        .copyright { border-top: 1px solid #333; padding-top: 40px; font-size: 0.8rem; color: #666; }
+        
+        /* 제출 후 성공 메시지 표시 */
+        #customForm.submitted > * { display: none; }
+        #customForm.submitted .success-message { display: block !important; }
 
-        @media (max-width: 768px) {
-            /* 모바일 반응형 스타일 (중략) */
-            .hero-text h1 { font-size: 2.8rem; }
-            .hero { flex-direction: column-reverse; text-align: center; }
-        }
+        .copyright { border-top: 1px solid #333; padding-top: 40px; font-size: 0.8rem; color: #666; }
     </style>
 </head>
 <body>
@@ -76,10 +74,8 @@
             
             <form id="customForm" 
                   action="https://docs.google.com/forms/d/e/1FAIpQLSdjzFFqOt_FZ1t5idLgq1Jc7YjW69y1zUekwyzL7QIcFe3vsw/formResponse" 
-                  method="POST" 
-                  target="google-form-iframe">
-                
-                <div class="preference-group">
+                  method="POST"
+                  target="_self"> <div class="preference-group">
                     <label class="pref-label">Q1. 선호하는 업무 분위기는?</label>
                     <div class="radio-group">
                         <label class="radio-item"><input type="radio" name="entry.370307877" value="조용한 집중형" required><span>🤫 조용한 집중</span></label>
@@ -118,11 +114,9 @@
                 <button type="submit" id="submitBtn">내 오피스 성향 분석 결과 받기</button>
 
                 <div class="success-message">
-                    🎉 분석 신청 완료!<br><br>보내주신 4가지 데이터를 정밀 분석하여<br>딱 맞는 오피스를 메일로 보내드릴게요.
+                    🎉 분석 신청 완료!<br><br>데이터가 전송되었습니다. 곧 리포트를 보내드릴게요!
                 </div>
             </form>
-            
-            <iframe name="google-form-iframe" id="google-form-iframe" style="display:none;"></iframe>
             
         </div>
         <div class="copyright">
@@ -134,13 +128,16 @@
 
     <script>
         function scrollToForm() { document.getElementById('customForm').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        
+        // 최종 테스트 결과, JS/iframe 트릭이 문제를 일으켰으므로,
+        // 페이지가 구글 화면으로 넘어가게 하고 JS는 UX 보조 역할만 수행
         const form = document.getElementById('customForm');
         form.addEventListener('submit', function() {
             const btn = document.getElementById('submitBtn');
-            btn.innerText = '데이터 분석 중...';
+            btn.innerText = '데이터 전송 중...'; // 로딩 표시
+            btn.disabled = true;
             
-            // 데이터 전송 시간을 위해 1초 후 UI 변경
-            setTimeout(() => { form.classList.add('submitted'); }, 1000);
+            // Note: 폼은 정상적으로 구글로 제출되어 페이지 이동이 발생함.
         });
     </script>
 </body>
