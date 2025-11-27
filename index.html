@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OFFIT - 나에게 딱 맞는 오피스 핏</title>
     <style>
-        /* (스타일은 가독성을 위해 생략하고, 기능/구조 스타일만 포함) */
+        /* (스타일은 기존과 동일하므로 생략) */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
         body { color: #333; line-height: 1.6; scroll-behavior: smooth; }
         a { text-decoration: none; color: inherit; }
@@ -25,8 +25,7 @@
         
         /* 폼 스타일 */
         #customForm { margin: 0 auto 50px; max-width: 550px; padding: 25px; border-radius: 16px; background: rgba(255,255,255,0.05); text-align: left; }
-        .preference-group { margin-bottom: 20px; }
-        .pref-label { display: block; color: var(--accent); font-weight: bold; margin-bottom: 10px; }
+        .preference-group { margin-bottom: 20px; } .pref-label { display: block; color: var(--accent); font-weight: bold; margin-bottom: 10px; }
         .radio-group { display: flex; gap: 10px; }
         .radio-item { flex: 1; position: relative; cursor: pointer; }
         .radio-item input { position: absolute; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
@@ -38,7 +37,12 @@
         #customForm.submitted > div:not(.success-message), #customForm.submitted > button { display: none; }
         #customForm.submitted .success-message { display: block; }
         .copyright { border-top: 1px solid #333; padding-top: 40px; font-size: 0.8rem; color: #666; }
-        @media (max-width: 768px) { .hero-text h1 { font-size: 2.8rem; } .hero { flex-direction: column-reverse; text-align: center; } }
+
+        @media (max-width: 768px) {
+            /* 모바일 반응형 스타일 (중략) */
+            .hero-text h1 { font-size: 2.8rem; }
+            .hero { flex-direction: column-reverse; text-align: center; }
+        }
     </style>
 </head>
 <body>
@@ -62,17 +66,6 @@
             <div class="feature-card"><h3>🔍 통합 비교 검색</h3><p>수십 개 사이트를 돌지 마세요. 지도 기반으로 위치, 가격, 잔여석을 한눈에 비교할 수 있습니다.</p></div>
             <div class="feature-card"><h3>🧩 초개인화 스타일 핏</h3><p>'개발자 집중형', '크리에이터 스튜디오' 등 내 업무 스타일에 딱 맞는 환경을 태그로 매칭합니다.</p></div>
             <div class="feature-card"><h3>⚡ 원스톱 다이렉트</h3><p>복잡한 전화 상담 없이, 앱에서 투어 신청부터 견적 확인까지 다이렉트로 연결됩니다.</p></div>
-        </div>
-    </section>
-
-    <section class="partners">
-        <h3>TRUSTED BY LOCAL SPACES</h3>
-        <div class="logo-row">
-            <div>SPARK WORK</div>
-            <div>THE STUDIO</div>
-            <div>NEST OFFICE</div>
-            <div>CO-HIVE</div>
-            <div>LOCAL LOUNGE</div>
         </div>
     </section>
 
