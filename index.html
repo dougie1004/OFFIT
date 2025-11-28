@@ -41,7 +41,6 @@
         #customForm.submitted .success-message { display: block !important; }
 
         .copyright { border-top: 1px solid #333; padding-top: 40px; font-size: 0.8rem; color: #666; }
-        @media (max-width: 768px) { .hero-text h1 { font-size: 2.8rem; } .hero { flex-direction: column-reverse; text-align: center; } }
     </style>
 </head>
 <body>
@@ -56,21 +55,6 @@
             <h1>당신의 오피스 핏,<br><span>오핏(OFFIT)</span>에서<br>찾아 드립니다.</h1>
             <p>단순한 공간 대여가 아닙니다.<br>예산, 기간은 기본. 당신의 <strong>업무 스타일(Fit)</strong>까지 분석해<br>가장 완벽한 업무 환경을 추천합니다.</p>
             <div class="hero-cta" onclick="scrollToForm()">지금 무료로 핏(Fit) 진단받기</div>
-        </div>
-        
-        <div class="hero-image">
-            <div class="phone-frame">
-                <div class="phone-notch"></div>
-                <div class="app-screen">
-                    <div style="font-weight:800; font-size:20px; margin-bottom:20px;">OF<span style="color:var(--primary)">FIT</span></div>
-                    <div style="background:#ECEFF1; height:220px; border-radius:20px; margin-bottom:20px; display:flex; align-items:center; justify-content:center; color:#90A4AE; font-weight:bold;">LOCATION BASE</div>
-                    <div style="font-weight:bold; margin-bottom:10px;">어떤 환경(Fit)을 원하세요?</div>
-                    <div style="display:flex; gap:5px; flex-wrap:wrap;">
-                        <span style="padding:6px 12px; background:#1A237E; color:white; border-radius:20px; font-size:12px;">💻 개발자_집중</span>
-                        <span style="padding:6px 12px; border:1px solid #ccc; border-radius:20px; font-size:12px;">☕ 카페_무드</span>
-                    </div>
-                </div>
-            </div>
         </div>
         </section>
 
@@ -151,7 +135,7 @@
         const formContainer = document.getElementById('customForm');
 
         form.addEventListener('submit', async function(event) {
-            // 1. 브라우저의 기본 페이지 이동/리로드 기능을 차단합니다.
+            // 1. 브라우저의 기본 페이지 이동/리로드 기능을 즉시 차단합니다.
             event.preventDefault(); 
             
             // 시각적 피드백 시작
@@ -167,19 +151,20 @@
                 const response = await fetch(actionUrl, {
                     method: 'POST',
                     body: formData,
+                    // 리디렉션을 follow로 설정하여 구글 서버가 응답을 보내게 합니다.
                     redirect: 'follow' 
                 });
 
-                // 3. 전송 성공 후 UI 변경
+                // 3. 서버 응답이 성공적이었다면 (200 OK 또는 302 Found) UI 변경
                 if (response.ok || response.status === 200 || response.status === 302) {
                     // 성공 UI로 전환
                     setTimeout(() => {
                         formContainer.classList.add('submitted');
-                        form.reset(); // 폼 필드 초기화
+                        form.reset(); // 폼 필드 초기화 (다음 접속 대비)
                     }, 500); 
                 } else {
-                    // 실패 시 에러 알림
-                    alert('데이터 전송에 문제가 발생했습니다. 잠시 후 다시 시도해주세요. (Status: ' + response.status + ')');
+                    // 서버가 실패 응답을 보냈다면 (거의 발생하지 않음)
+                    alert('데이터 전송 실패! 설문지 설정을 확인해 주세요. Status: ' + response.status);
                     submitBtn.innerText = '다시 시도';
                     submitBtn.disabled = false;
                 }
