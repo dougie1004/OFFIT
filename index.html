@@ -1,181 +1,28 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OFFIT - 나에게 딱 맞는 오피스 핏</title>
-    <style>
-        /* (스타일은 기존과 동일) */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
-        body { color: #333; line-height: 1.6; scroll-behavior: smooth; }
-        a { text-decoration: none; color: inherit; }
-        :root { --primary: #2962FF; --accent: #00E676; --dark: #1A237E; --white: #FFFFFF; --success: #00C853; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(255,255,255,0.95); position: sticky; top: 0; z-index: 100; box-shadow: 0 0 10px rgba(0,0,0,0.1); backdrop-filter: blur(10px); }
-        .logo { font-size: 26px; font-weight: 900; color: var(--dark); letter-spacing: -1px; font-style: italic;} .logo span { color: var(--primary); }
-        .nav-btn { background: var(--dark); color: white; padding: 10px 24px; border-radius: 25px; font-weight: 600; font-size: 14px; cursor: pointer; }
-        .hero { background: linear-gradient(135deg, #F9FAFB 0%, #E3F2FD 100%); padding: 80px 5%; display: flex; align-items: center; justify-content: space-between; min-height: 85vh; flex-wrap: wrap; }
-        .hero-text { flex: 1; min-width: 320px; padding-right: 40px; margin-bottom: 40px; }
-        .hero-text h1 { font-size: 3.8rem; line-height: 1.2; color: var(--dark); letter-spacing: -1px; }
-        .hero-cta { display: inline-block; background: var(--primary); color: white; padding: 18px 40px; border-radius: 50px; font-weight: bold; cursor: pointer; }
-        .phone-frame { width: 320px; height: 640px; background: white; border: 12px solid #263238; border-radius: 45px; overflow: hidden; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.15); }
-        .app-screen { padding: 45px 20px; background: #FAFAFA; height: 100%; display: flex; flex-direction: column; }
-        .section { padding: 100px 5%; text-align: center; } 
-        .features-grid { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
-        footer { background: #1a1a1a; color: white; padding: 80px 5%; text-align: center; }
-        
-        /* 폼 스타일 */
-        #customForm { margin: 0 auto 50px; max-width: 550px; padding: 25px; border-radius: 16px; background: rgba(255,255,255,0.05); text-align: left; }
-        .preference-group { margin-bottom: 20px; }
-        .pref-label { display: block; color: var(--accent); font-weight: bold; margin-bottom: 10px; }
-        .radio-group { display: flex; gap: 10px; }
-        .radio-item { flex: 1; position: relative; cursor: pointer; }
-        .radio-item input { position: absolute; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-        .radio-item span { display: flex; align-items: center; justify-content: center; padding: 12px 5px; background: rgba(255,255,255,0.1); border-radius: 10px; color: #eee; border: 2px solid transparent; }
-        .radio-item input:checked + span { background: rgba(41, 98, 255, 0.25); border-color: var(--primary); font-weight: bold; }
-        .input-group input { width: 100%; padding: 16px; border-radius: 10px; border: none; background: rgba(0,0,0,0.3); color: white; margin-top: 15px; }
-        #submitBtn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 25px; }
-        .success-message { display: none; padding: 30px; background: rgba(0, 200, 83, 0.1); color: var(--success); border: 1px solid var(--success); border-radius: 16px; margin-top: 20px; text-align: center; }
-        
-        /* 제출 후 성공 메시지 표시 */
-        #customForm.submitted > * { display: none; }
-        #customForm.submitted .success-message { display: block !important; }
+/**
+ * 폼 제출 시 자동으로 실행되어 외부 이메일 주소로 알림을 보내는 함수
+ * @param {object} e - 폼 제출 이벤트 객체
+ */
+function sendFormAlert(e) {
+  // ★★★ 1. 알림을 받을 보조 이메일 주소 (pais54@naver.com 으로 수정 완료) ★★★
+  const recipient = "pais54@naver.com"; 
+  
+  // 2. 응답 데이터 추출 (Google Sheet의 컬럼 순서대로 [0]부터 시작합니다)
+  // [0]=Timestamp, [1]=Q1(분위기), [2]=Q2(기간), [3]=Q3(시설), [4]=Q4(위치), [5]=Q5(이메일)
+  const timestamp = e.values[0]; 
+  const atmosphere = e.values[1];
+  const duration = e.values[2];
+  const submittedEmail = e.values[5]; // 설문 응답자가 입력한 이메일 주소
 
-        .copyright { border-top: 1px solid #333; padding-top: 40px; font-size: 0.8rem; color: #666; }
-    </style>
-</head>
-<body>
-
-    <header>
-        <div class="logo">OF<span>FIT</span></div>
-        <div class="nav-btn" onclick="scrollToForm()">내 오피스 핏 진단하기</div>
-    </header>
-
-    <section class="hero">
-        <div class="hero-text">
-            <h1>당신의 오피스 핏,<br><span>오핏(OFFIT)</span>에서<br>찾아 드립니다.</h1>
-            <p>단순한 공간 대여가 아닙니다.<br>예산, 기간은 기본. 당신의 <strong>업무 스타일(Fit)</strong>까지 분석해<br>가장 완벽한 업무 환경을 추천합니다.</p>
-            <div class="hero-cta" onclick="scrollToForm()">지금 무료로 핏(Fit) 진단받기</div>
-        </div>
-        </section>
-
-    <section class="section">
-        <h2>왜 오핏(OFFIT) 인가요?</h2>
-        <div class="features-grid">
-            <div class="feature-card"><h3>🔍 통합 비교 검색</h3><p>수십 개 사이트를 돌지 마세요. 지도 기반으로 위치, 가격, 잔여석을 한눈에 비교할 수 있습니다.</p></div>
-            <div class="feature-card"><h3>🧩 초개인화 스타일 핏</h3><p>'개발자 집중형', '크리에이터 스튜디오' 등 내 업무 스타일에 딱 맞는 환경을 태그로 매칭합니다.</p></div>
-            <div class="feature-card"><h3>⚡ 원스톱 다이렉트</h3><p>복잡한 전화 상담 없이, 앱에서 투어 신청부터 견적 확인까지 다이렉트로 연결됩니다.</p></div>
-        </div>
-    </section>
-
-    <footer id="footer">
-        <div class="footer-cta">
-            <h2>나에게 딱 맞는 오피스,<br>AI 진단으로 찾아보세요.</h2>
-            <p>4가지 질문에 답해주시면, 당신의 업무 성향을 분석하여<br>최적의 오피스 리스트를 메일로 보내드립니다.</p>
-            
-            <form id="customForm" 
-                  action="https://docs.google.com/forms/d/e/1FAIpQLSdjzFFqOt_FZ1t5idLgq1Jc7YjW69y1zUekwyzL7QIcFe3vsw/formResponse" 
-                  method="POST"> 
-                
-                <div class="preference-group">
-                    <label class="pref-label">Q1. 선호하는 업무 분위기는?</label>
-                    <div class="radio-group">
-                        <label class="radio-item"><input type="radio" name="entry.370307877" value="조용한 집중형" required><span>🤫 조용한 집중</span></label>
-                        <label class="radio-item"><input type="radio" name="entry.370307877" value="활기찬 카페형"><span>☕ 활기찬 카페</span></label>
-                    </div>
-                </div>
-
-                <div class="preference-group">
-                    <label class="pref-label">Q2. 희망하는 이용 기간은?</label>
-                    <div class="radio-group">
-                        <label class="radio-item"><input type="radio" name="entry.189229882" value="시간/일 단위" required><span>⚡ 시간/일 단위 (Flex)</span></label>
-                        <label class="radio-item"><input type="radio" name="entry.189229882" value="월 단위"><span>📅 월 단위 (Stable)</span></label>
-                    </div>
-                </div>
-
-                <div class="preference-group">
-                    <label class="pref-label">Q3. 가장 중요한 시설은?</label>
-                    <div class="radio-group">
-                        <label class="radio-item"><input type="radio" name="entry.1238327539" value="네트워킹/라운지" required><span>🤝 네트워킹/라운지</span></label>
-                        <label class="radio-item"><input type="radio" name="entry.1238327539" value="보안/독립룸"><span>🔒 보안/독립룸</span></label>
-                    </div>
-                </div>
-
-                <div class="preference-group">
-                    <label class="pref-label">Q4. 위치 선정 기준은?</label>
-                    <div class="radio-group">
-                        <label class="radio-item"><input type="radio" name="entry.1993302438" value="집에서 가까운 곳" required><span>🏠 집 근처 (재택대용)</span></label>
-                        <label class="radio-item"><input type="radio" name="entry.1993302438" value="미팅 편한 핫플"><span>🏙️ 미팅 편한 핫플</span></label>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <input type="email" id="emailInput" name="entry.987425434" placeholder="분석 리포트를 받을 이메일 주소" required>
-                </div>
-
-                <button type="submit" id="submitBtn">내 오피스 성향 분석 결과 받기</button>
-
-                <div class="success-message">
-                    🎉 분석 신청 완료!<br><br>보내주신 4가지 데이터를 정밀 분석하여<br>딱 맞는 오피스를 메일로 보내드릴게요.
-                </div>
-            </form>
-            
-        </div>
-        <div class="copyright">
-            (주)오핏 | 대표: 홍길동 | 사업자등록번호: 000-00-00000<br>
-            contact@offit.com<br>
-            © 2025 OFFIT. All rights reserved.
-        </div>
-    </footer>
-
-    <script>
-        function scrollToForm() { document.getElementById('customForm').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-        
-        const form = document.getElementById('customForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const formContainer = document.getElementById('customForm');
-
-        form.addEventListener('submit', async function(event) {
-            // 1. 브라우저의 기본 페이지 이동/리로드 기능을 즉시 차단합니다.
-            event.preventDefault(); 
-            
-            // 시각적 피드백 시작
-            submitBtn.innerText = '데이터 전송 중...';
-            submitBtn.disabled = true;
-
-            // FormData 객체를 사용하여 폼 데이터를 수집합니다.
-            const formData = new FormData(form);
-            const actionUrl = form.action;
-
-            try {
-                // 2. 비동기 통신 (Fetch API)으로 데이터를 서버에 전송합니다.
-                const response = await fetch(actionUrl, {
-                    method: 'POST',
-                    body: formData,
-                    redirect: 'follow' 
-                });
-
-                // 3. 서버 응답이 성공적이었다면 (데이터는 전송됨)
-                if (response.ok || response.status === 200 || response.status === 302) {
-                    // 성공 UI로 전환
-                    setTimeout(() => {
-                        formContainer.classList.add('submitted');
-                        form.reset(); // 폼 필드 초기화
-                    }, 500); 
-                } else {
-                    // 서버가 실패 응답을 보냈다면 (거의 발생하지 않음)
-                    alert('데이터 전송 실패! 설문지 설정을 확인해 주세요. Status: ' + response.status);
-                    submitBtn.innerText = '다시 시도';
-                    submitBtn.disabled = false;
-                }
-
-            } catch (error) {
-                // 네트워크 오류 처리
-                console.error('Submission failed:', error);
-                alert('네트워크 연결 오류가 발생했습니다.');
-                submitBtn.innerText = '다시 시도';
-                submitBtn.disabled = false;
-            }
-        });
-    </script>
-</body>
-</html>
+  const subject = "🔔 OFFIT 사전예약 도착! (" + atmosphere + " 성향)";
+  
+  const body = "새로운 오피스 성향 분석 결과가 제출되었습니다.\n\n" +
+               "--- 데이터 요약 ---\n" +
+               "성향 분석: " + atmosphere + "\n" +
+               "기간 선호: " + duration + "\n" +
+               "고객 이메일: " + submittedEmail + "\n" +
+               "제출 시각: " + timestamp + "\n\n" +
+               "※ 상세 내용은 Google Sheet에서 확인하세요.";
+  
+  // 3. 이메일 발송
+  MailApp.sendEmail(recipient, subject, body);
+}
