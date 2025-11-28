@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OFFIT - 나에게 딱 맞는 오피스 핏</title>
     <style>
-        /* (스타일은 이전 답변과 동일 - 중략) */
+        /* (스타일은 기존과 동일) */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
         body { color: #333; line-height: 1.6; scroll-behavior: smooth; }
         a { text-decoration: none; color: inherit; }
@@ -118,7 +118,7 @@
                 <button type="submit" id="submitBtn">내 오피스 성향 분석 결과 받기</button>
 
                 <div class="success-message">
-                    🎉 분석 신청 완료!<br><br>데이터가 전송되었습니다. 곧 리포트를 보내드릴게요.
+                    🎉 분석 신청 완료! (메일함에서 확인해 주세요)
                 </div>
             </form>
             
@@ -138,44 +138,12 @@
         form.addEventListener('submit', function(event) {
             
             const submitBtn = document.getElementById('submitBtn');
-            const formContainer = document.getElementById('customForm');
-
-            // 1. 브라우저의 기본 제출 기능을 막습니다. (핵심)
-            event.preventDefault(); 
             
-            // 2. 시각적 피드백 시작
+            // 1. 시각적 피드백 시작 (제출 직전)
             submitBtn.innerText = '데이터 전송 중...';
             submitBtn.disabled = true;
 
-            // 3. 폼 데이터를 FormData로 준비합니다.
-            const formData = new FormData(form);
-
-            // 4. FormSubmit의 엔드포인트로 데이터를 비동기 전송합니다.
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => {
-                 // 5. 전송 완료 후, 성공 UI를 즉시 보여줍니다.
-                if (response.ok) {
-                    formContainer.classList.add('submitted');
-                    form.reset(); 
-                } else {
-                    // FormSubmit 서버에서 문제가 발생했을 경우
-                    alert('데이터 전송에 실패했습니다. (서버 오류)');
-                    form.reset();
-                }
-            })
-            .catch(error => {
-                // 네트워크 오류 발생 시
-                alert('네트워크 연결 오류가 발생했습니다.');
-                console.error('Submission failed:', error);
-            })
-            .finally(() => {
-                // 오류가 났든 성공했든, 버튼 상태 복구 (새로고침이 없으므로)
-                submitBtn.innerText = '내 오피스 성향 분석 결과 받기';
-                submitBtn.disabled = false;
-            });
+            // 2. event.preventDefault() 제거하여 FormSubmit이 자체적으로 제출하도록 허용
         });
     </script>
 </body>
