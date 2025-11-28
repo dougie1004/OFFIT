@@ -36,7 +36,10 @@
         #submitBtn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 25px; }
         .success-message { display: none; padding: 30px; background: rgba(0, 200, 83, 0.1); color: var(--success); border: 1px solid var(--success); border-radius: 16px; margin-top: 20px; text-align: center; }
         
-        /* Netlify Forms는 submit 후 페이지가 이동하므로, JS Success는 사용 안 함 */
+        /* 제출 후 성공 메시지 표시 */
+        #customForm.submitted > * { display: none; }
+        #customForm.submitted .success-message { display: block !important; }
+
         .copyright { border-top: 1px solid #333; padding-top: 40px; font-size: 0.8rem; color: #666; }
     </style>
 </head>
@@ -70,12 +73,13 @@
             <p>4가지 질문에 답해주시면, 당신의 업무 성향을 분석하여<br>최적의 오피스 리스트를 메일로 보내드립니다.</p>
             
             <form id="customForm" 
-                  name="offit_submission" 
-                  method="POST" 
-                  data-netlify="true" 
-                  action="/success"> 
+                  action="https://api.web3forms.com/submit" 
+                  method="POST"> 
                 
-                <input type="hidden" name="form-name" value="offit_submission" />
+                <input type="hidden" name="access_key" value="02efc3e6-0609-47a3-8331-8e88bcee01a4">
+                
+                <input type="hidden" name="_next" value="https://dougie1004.github.io/offit/">
+                <input type="hidden" name="_subject" value="[OFFIT] 신규 성향 분석 데이터 도착">
 
                 <div class="preference-group">
                     <label class="pref-label">Q1. 선호하는 업무 분위기는?</label>
@@ -114,11 +118,12 @@
                 </div>
 
                 <button type="submit" id="submitBtn">내 오피스 성향 분석 결과 받기</button>
-            </form>
 
-            <p style="margin-top: 15px; font-size: 0.9rem; color: #aaa;">
-                *이 폼은 Netlify Forms를 통해 데이터를 안전하게 수집합니다.
-            </p>
+                <div class="success-message">
+                    🎉 분석 신청 완료! (메일함에서 확인해 주세요)
+                </div>
+            </form>
+            
         </div>
         <div class="copyright">
             (주)오핏 | 대표: 홍길동 | 사업자등록번호: 000-00-00000<br>
@@ -128,11 +133,20 @@
     </footer>
 
     <script>
-        function scrollToForm() { 
-            document.getElementById('customForm').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
-        }
+        function scrollToForm() { document.getElementById('customForm').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        
+        const form = document.getElementById('customForm');
+        
+        form.addEventListener('submit', function(event) {
+            
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // 시각적 피드백 시작 (제출 직전)
+            submitBtn.innerText = '데이터 전송 중...';
+            submitBtn.disabled = true;
+
+            // Web3Forms가 자동 페이지 이동을 처리합니다.
+        });
     </script>
-``
 </body>
 </html>
-
