@@ -45,60 +45,83 @@
 </head>
 <body>
 
+    <header>
+        <div class="logo">OF<span>FIT</span></div>
+        <div class="nav-btn" onclick="scrollToForm()">내 오피스 핏 진단하기</div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h1>당신의 오피스 핏,<br><span>오핏(OFFIT)</span>에서<br>찾아 드립니다.</h1>
+            <p>단순한 공간 대여가 아닙니다.<br>예산, 기간은 기본. 당신의 <strong>업무 스타일(Fit)</strong>까지 분석해<br>가장 완벽한 업무 환경을 추천합니다.</p>
+            <div class="hero-cta" onclick="scrollToForm()">지금 무료로 핏(Fit) 진단받기</div>
+        </div>
+        </section>
+
+    <section class="section">
+        <h2>왜 오핏(OFFIT) 인가요?</h2>
+        <div class="features-grid">
+            <div class="feature-card"><h3>🔍 통합 비교 검색</h3><p>수십 개 사이트를 돌지 마세요. 지도 기반으로 위치, 가격, 잔여석을 한눈에 비교할 수 있습니다.</p></div>
+            <div class="feature-card"><h3>🧩 초개인화 스타일 핏</h3><p>'개발자 집중형', '크리에이터 스튜디오' 등 내 업무 스타일에 딱 맞는 환경을 태그로 매칭합니다.</p></div>
+            <div class="feature-card"><h3>⚡ 원스톱 다이렉트</h3><p>복잡한 전화 상담 없이, 앱에서 투어 신청부터 견적 확인까지 다이렉트로 연결됩니다.</p></div>
+        </div>
+    </section>
+
     <footer id="footer">
         <div class="footer-cta">
             <h2>나에게 딱 맞는 오피스,<br>AI 진단으로 찾아보세요.</h2>
             <p>4가지 질문에 답해주시면, 당신의 업무 성향을 분석하여<br>최적의 오피스 리스트를 메일로 보내드립니다.</p>
             
             <form id="customForm" 
-                  action="https://docs.google.com/forms/d/e/1FAIpQLSdjzFFqOt_FZ1t5idLgq1Jc7YjW69y1zUekwyzL7QIcFe3vsw/formResponse" 
-                  method="POST"
-                  target="google-form-iframe"> <div class="preference-group">
+                  action="https://formsubmit.co/dwlee75@gmail.com" 
+                  method="POST"> 
+                
+                <input type="hidden" name="_next" value="[여기에_랜딩페이지_URL_붙여넣기]">
+                <input type="hidden" name="_subject" value="[OFFIT] 신규 성향 분석 데이터 도착">
+
+                <div class="preference-group">
                     <label class="pref-label">Q1. 선호하는 업무 분위기는?</label>
                     <div class="radio-group">
-                        <label class="radio-item"><input type="radio" name="entry.370307877" value="조용한 집중형" required><span>🤫 조용한 집중</span></label>
-                        <label class="radio-item"><input type="radio" name="entry.370307877" value="활기찬 카페형"><span>☕ 활기찬 카페</span></label>
+                        <label class="radio-item"><input type="radio" name="Q1_Atmosphere" value="조용한 집중형" required><span>🤫 조용한 집중</span></label>
+                        <label class="radio-item"><input type="radio" name="Q1_Atmosphere" value="활기찬 카페형"><span>☕ 활기찬 카페</span></label>
                     </div>
                 </div>
 
                 <div class="preference-group">
                     <label class="pref-label">Q2. 희망하는 이용 기간은?</label>
                     <div class="radio-group">
-                        <label class="radio-item"><input type="radio" name="entry.189229882" value="시간/일 단위" required><span>⚡ 시간/일 단위 (Flex)</span></label>
-                        <label class="radio-item"><input type="radio" name="entry.189229882" value="월 단위"><span>📅 월 단위 (Stable)</span></label>
+                        <label class="radio-item"><input type="radio" name="Q2_Term" value="시간/일 단위" required><span>⚡ 시간/일 단위 (Flex)</span></label>
+                        <label class="radio-item"><input type="radio" name="Q2_Term" value="월 단위"><span>📅 월 단위 (Stable)</span></label>
                     </div>
                 </div>
 
                 <div class="preference-group">
                     <label class="pref-label">Q3. 가장 중요한 시설은?</label>
                     <div class="radio-group">
-                        <label class="radio-item"><input type="radio" name="entry.1238327539" value="네트워킹/라운지" required><span>🤝 네트워킹/라운지</span></label>
-                        <label class="radio-item"><input type="radio" name="entry.1238327539" value="보안/독립룸"><span>🔒 보안/독립룸</span></label>
+                        <label class="radio-item"><input type="radio" name="Q3_Facility" value="네트워킹/라운지" required><span>🤝 네트워킹/라운지</span></label>
+                        <label class="radio-item"><input type="radio" name="Q3_Facility" value="보안/독립룸"><span>🔒 보안/독립룸</span></label>
                     </div>
                 </div>
 
                 <div class="preference-group">
                     <label class="pref-label">Q4. 위치 선정 기준은?</label>
                     <div class="radio-group">
-                        <label class="radio-item"><input type="radio" name="entry.1993302438" value="집에서 가까운 곳" required><span>🏠 집 근처 (재택대용)</span></label>
-                        <label class="radio-item"><input type="radio" name="entry.1993302438" value="미팅 편한 핫플"><span>🏙️ 미팅 편한 핫플</span></label>
+                        <label class="radio-item"><input type="radio" name="Q4_Location" value="집에서 가까운 곳" required><span>🏠 집 근처 (재택대용)</span></label>
+                        <label class="radio-item"><input type="radio" name="Q4_Location" value="미팅 편한 핫플"><span>🏙️ 미팅 편한 핫플</span></label>
                     </div>
                 </div>
 
                 <div class="input-group">
-                    <input type="email" id="emailInput" name="entry.987425434" placeholder="분석 리포트를 받을 이메일 주소" required>
+                    <input type="email" name="Email" placeholder="분석 리포트를 받을 이메일 주소" required>
                 </div>
 
                 <button type="submit" id="submitBtn">내 오피스 성향 분석 결과 받기</button>
 
                 <div class="success-message">
-                    🎉 분석 신청 완료!<br><br>보내주신 4가지 데이터를 정밀 분석하여<br>딱 맞는 오피스를 메일로 보내드릴게요.
+                    🎉 분석 신청 완료!<br><br>데이터가 전송되었습니다. 곧 리포트를 보내드릴게요.
                 </div>
             </form>
             
-            <iframe name="google-form-iframe" id="google-form-iframe" style="display:none;" 
-                    onload="handleFormSubmit()"></iframe>
-
         </div>
         <div class="copyright">
             (주)오핏 | 대표: 홍길동 | 사업자등록번호: 000-00-00000<br>
@@ -110,22 +133,25 @@
     <script>
         function scrollToForm() { document.getElementById('customForm').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
         
-        const formContainer = document.getElementById('customForm');
+        const form = document.getElementById('customForm');
+        
+        // 중요: FormSubmit은 자체적으로 페이지 이동을 처리하므로, 
+        // JavaScript로 preventDefault를 걸지 않고 기본 제출을 허용합니다.
+        // 대신, FormSubmit의 hidden field를 이용해 제출 후 OFFIT 페이지로 돌아오도록 설정했습니다.
+        
+        form.addEventListener('submit', function() {
+            const submitBtn = document.getElementById('submitBtn');
+            // 로딩 상태 표시
+            submitBtn.innerText = '데이터 전송 중...';
+            submitBtn.disabled = true;
+        });
 
-        function handleFormSubmit() {
-            const iframe = document.getElementById('google-form-iframe');
-            
-            // Iframe이 Forms 응답 페이지를 로드했을 때만 실행됩니다.
-            // (사용자 제출 후 페이지 이동 없이 시트 기록 성공을 보장합니다.)
-            
-            // Google Forms의 응답 URL을 감지하여 정상적인 제출로 판단합니다.
-            // 이 로직은 Form 제출이 성공했을 때만 실행됩니다.
-            if (iframe.contentWindow.location.href.includes('formResponse')) {
-                // UI를 성공 상태로 전환
-                formContainer.classList.add('submitted');
-                document.getElementById('customForm').reset();
-            }
-        }
+        /*
+         * FormSubmit 사용법:
+         * 1. 제출 후, FormSubmit이 dwlee75@gmail.com으로 이메일을 보내기 전에,
+         * 2. dwlee75@gmail.com 계정으로 접속하여 FormSubmit의 '확인' 메일을 클릭해야 합니다.
+         * 3. 그 이후부터 데이터가 정상적으로 전송됩니다.
+         */
     </script>
 </body>
 </html>
