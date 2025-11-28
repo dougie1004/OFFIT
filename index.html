@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OFFIT - 나에게 딱 맞는 오피스 핏</title>
     <style>
-        /* (스타일은 기존과 동일) */
+        /* (스타일은 이전 답변과 동일 - 중략) */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
         body { color: #333; line-height: 1.6; scroll-behavior: smooth; }
         a { text-decoration: none; color: inherit; }
@@ -83,7 +83,7 @@
                     <label class="pref-label">Q1. 선호하는 업무 분위기는?</label>
                     <div class="radio-group">
                         <label class="radio-item"><input type="radio" name="Q1_Atmosphere" value="조용한 집중형" required><span>🤫 조용한 집중</span></label>
-                        <label class="radio-item"><input type="radio" name="Q1_Atmosphere" value="활기찬 카페형"><span>☕ 활기찬 카페</span></label>
+                        <label class="radio-item"><input type="radio" name="Q1_Atmosphere" value="활기찬 카페형" required><span>☕ 활기찬 카페</span></label>
                     </div>
                 </div>
 
@@ -91,7 +91,7 @@
                     <label class="pref-label">Q2. 희망하는 이용 기간은?</label>
                     <div class="radio-group">
                         <label class="radio-item"><input type="radio" name="Q2_Term" value="시간/일 단위" required><span>⚡ 시간/일 단위 (Flex)</span></label>
-                        <label class="radio-item"><input type="radio" name="Q2_Term" value="월 단위"><span>📅 월 단위 (Stable)</span></label>
+                        <label class="radio-item"><input type="radio" name="Q2_Term" value="월 단위" required><span>📅 월 단위 (Stable)</span></label>
                     </div>
                 </div>
 
@@ -99,7 +99,7 @@
                     <label class="pref-label">Q3. 가장 중요한 시설은?</label>
                     <div class="radio-group">
                         <label class="radio-item"><input type="radio" name="Q3_Facility" value="네트워킹/라운지" required><span>🤝 네트워킹/라운지</span></label>
-                        <label class="radio-item"><input type="radio" name="Q3_Facility" value="보안/독립룸"><span>🔒 보안/독립룸</span></label>
+                        <label class="radio-item"><input type="radio" name="Q3_Facility" value="보안/독립룸" required><span>🔒 보안/독립룸</span></label>
                     </div>
                 </div>
 
@@ -107,7 +107,7 @@
                     <label class="pref-label">Q4. 위치 선정 기준은?</label>
                     <div class="radio-group">
                         <label class="radio-item"><input type="radio" name="Q4_Location" value="집에서 가까운 곳" required><span>🏠 집 근처 (재택대용)</span></label>
-                        <label class="radio-item"><input type="radio" name="Q4_Location" value="미팅 편한 핫플"><span>🏙️ 미팅 편한 핫플</span></label>
+                        <label class="radio-item"><input type="radio" name="Q4_Location" value="미팅 편한 핫플" required><span>🏙️ 미팅 편한 핫플</span></label>
                     </div>
                 </div>
 
@@ -135,23 +135,48 @@
         
         const form = document.getElementById('customForm');
         
-        // 중요: FormSubmit은 자체적으로 페이지 이동을 처리하므로, 
-        // JavaScript로 preventDefault를 걸지 않고 기본 제출을 허용합니다.
-        // 대신, FormSubmit의 hidden field를 이용해 제출 후 OFFIT 페이지로 돌아오도록 설정했습니다.
-        
-        form.addEventListener('submit', function() {
+        form.addEventListener('submit', function(event) {
+            
             const submitBtn = document.getElementById('submitBtn');
-            // 로딩 상태 표시
+            const formContainer = document.getElementById('customForm');
+
+            // 1. 브라우저의 기본 제출 기능을 막습니다. (핵심)
+            event.preventDefault(); 
+            
+            // 2. 시각적 피드백 시작
             submitBtn.innerText = '데이터 전송 중...';
             submitBtn.disabled = true;
-        });
 
-        /*
-         * FormSubmit 사용법:
-         * 1. 제출 후, FormSubmit이 dwlee75@gmail.com으로 이메일을 보내기 전에,
-         * 2. dwlee75@gmail.com 계정으로 접속하여 FormSubmit의 '확인' 메일을 클릭해야 합니다.
-         * 3. 그 이후부터 데이터가 정상적으로 전송됩니다.
-         */
+            // 3. 폼 데이터를 FormData로 준비합니다.
+            const formData = new FormData(form);
+
+            // 4. FormSubmit의 엔드포인트로 데이터를 비동기 전송합니다.
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                 // 5. 전송 완료 후, 성공 UI를 즉시 보여줍니다.
+                if (response.ok) {
+                    formContainer.classList.add('submitted');
+                    form.reset(); 
+                } else {
+                    // FormSubmit 서버에서 문제가 발생했을 경우
+                    alert('데이터 전송에 실패했습니다. (서버 오류)');
+                    form.reset();
+                }
+            })
+            .catch(error => {
+                // 네트워크 오류 발생 시
+                alert('네트워크 연결 오류가 발생했습니다.');
+                console.error('Submission failed:', error);
+            })
+            .finally(() => {
+                // 오류가 났든 성공했든, 버튼 상태 복구 (새로고침이 없으므로)
+                submitBtn.innerText = '내 오피스 성향 분석 결과 받기';
+                submitBtn.disabled = false;
+            });
+        });
     </script>
 </body>
 </html>
